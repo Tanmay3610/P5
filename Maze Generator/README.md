@@ -1,4 +1,4 @@
-This is automatic Maze Generator.
+# This is automatic Maze Generator.
 
 Algorithm used:
 

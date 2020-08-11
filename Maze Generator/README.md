@@ -1,5 +1,7 @@
 This is automatic Maze Generator.
+
 Algorithm used:
+
 1. Choose the initial cell, mark it as visited and push it to the stack
 
 

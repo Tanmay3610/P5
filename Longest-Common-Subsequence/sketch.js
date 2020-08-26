@@ -4,7 +4,7 @@ const width = 50;
 const mesh = [];
 var x = 0;
 var y = 0;
-
+var completed = false;
 function setup() {
   //Setting the frame Rate
   frameRate(5);
@@ -45,10 +45,10 @@ function solve() {
         mesh[i][j].direction = 'd';
       } else {
         mesh[i][j].data = max(mesh[i][j - 1].data, mesh[i - 1][j].data);
-        if (mesh[i][j - 1].data > mesh[i - 1][j].data) {
-          mesh[i][j].direction = 'l';
-        } else {
+        if (mesh[i][j - 1].data >= mesh[i - 1][j].data) {
           mesh[i][j].direction = 'u';
+        } else {
+          mesh[i][j].direction = 'l';
         }
       }
     }
@@ -78,29 +78,65 @@ function checkSame(varX, varY) {
 }
 
 function answerFill(varX, varY) {
+  var data = `${mesh[varX][varY].data}/${mesh[varX][varY].direction}`;
   fill(0, 255, 0);
   textSize(32);
-  text(mesh[varX][varY].data, varX * width + width / 2.5, varY * width + width / 1.5);
+  text(data, varX * width + width / 15, varY * width + width / 1.5);
+}
+
+
+function backTrack(varX, varY){
+    stroke(0);
+    fill(204, 12, 198);
+    rect(varX * width, varY * width, width, width);
+    mesh[varX][varY].renderData();
+}
+
+function highlight(varX, varY){
+    stroke(0);
+    fill(108, 79, 214);
+    rect(varX * width, varY * width, width, width);
+    stroke(240, 236, 2);
+    textSize(32);
+    text(a[varX - 1], varX * width + width/5, varY * width + width/1.5)
 }
 
 //Driver function
 function draw() {
-
-  if (x > a.length) {
-    y++;
-    x = 0;
+  if (completed) {
+    if(mesh[x][y].direction == '.'){
+      noLoop();
+    }
+    else if(mesh[x][y].direction == 'u'){
+      y--;
+    }
+    else if(mesh[x][y].direction == 'l'){
+      x--;
+    }
+    else if(mesh[x][y].direction == 'd'){
+      highlight(x, y);
+      x--;
+      y--;
+    }
+    backTrack(x, y);
   }
+    else{
+      if (x > a.length) {
+      y++;
+      x = 0;
+    }
 
-  //fills the color to the visited cells of the mesh
-  fillColor(x, y);
+    //fills the color to the visited cells of the mesh
+    fillColor(x, y);
 
-  //Checks if the character at this position are same or not
-  checkSame(x, y);
-  mesh[x][y].renderData();
-  x++;
+    //Checks if the character at this position are same or not
+    checkSame(x, y);
+    mesh[x][y].renderData();
+    x++;
 
-  if (x >= a.length && y >= b.length) {
-    answerFill(x, y);
-    noLoop();
-  }
+    if (x >= a.length && y >= b.length) {
+      answerFill(x, y);
+      completed = true;
+    }
+  }  
 }

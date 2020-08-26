@@ -13,7 +13,9 @@ class Cell{
   }
   
   renderData(){
+    var data = `${this.data}/${this.direction}`
+    textSize(12)
     fill(255, 0, 0);
-    text(this.data, this.x * width + width/2, this.y * width + width/2);    
+    text(data, this.x * width + width/2, this.y * width + width/2);    
   }
 }
